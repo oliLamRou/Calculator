@@ -15,37 +15,62 @@ let calculatorButtons = [
         "0", ".", "="
 ]
 
-
-
-
-let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
-
 struct ContentView: View {
+    let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
+    
     var body: some View {
-        VStack {
-            Spacer()
-            Text("1000").font(.largeTitle)
-            LazyVGrid(columns: columns) {
-                 ForEach(Array(calculatorButtons), id: \.self) { value in
-                     calculatorButton(value, .red)
-                 }
-            }.padding()
+        ZStack {
+            Rectangle().ignoresSafeArea()
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    Text("1000")
+                        .font(.system(size: 90))
+                        .foregroundStyle(.white)
+                        .padding()
+                }
+                LazyVGrid(columns: columns) {
+                    ForEach(0..<calculatorButtons.count) { index in
+                         calculatorButton(index)
+                     }
+                }.padding()
+            }
         }
     }
     
     /*:
      -note:
-        - get the ZERO button to be large
-        - Scale text without changing layout
-        - get button color
+        - get the ZERO button to fit
+        - Total closer to button
      */
     
     @ViewBuilder
-    func calculatorButton(_ value: String, _ color: Color) -> some View {
-        let color = Color.gray
+    func calculatorButton(_ index: Int) -> some View {
+        let value = calculatorButtons[index]
+        
+        var color: Color {
+            if index < 3 {
+                return .gray
+            }
+            if [3,7,11,15,18].contains(where: {$0 == index}) {
+                return .orange
+            }
+            return Color(.darkGray)
+        }
+        
         ZStack {
-            Circle().foregroundStyle(.red)
+            if index == 16 {
+                RoundedRectangle(cornerRadius: 50.0)
+                    .foregroundStyle(color)
+                    .frame(width: 100)
+            } else {
+                Circle().foregroundStyle(color)
+            }
             Text(value)
+                .font(.largeTitle)
+                .foregroundStyle(.white)
+                .padding()
         }
     }
 }
