@@ -18,7 +18,42 @@ let calculatorButtons = [
 struct ContentView: View {
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     
+    var roundButton: some View {
+        Circle()
+    }
+    
     var body: some View {
+        HStack {
+            VStack {
+                // top gray
+                HStack {
+                    roundButton
+                    roundButton
+                    roundButton
+                }
+                // number 1 to 9
+                LazyVGrid(columns: [GridItem(), GridItem(), GridItem()]) {
+                    ForEach(1..<10) { value in
+                        roundButton
+                    }
+                }
+                //0.
+                HStack {
+                    RoundedRectangle(cornerRadius: 100).frame(width: 50)
+                    roundButton
+                }
+            }
+            // ÷x+-=
+            VStack {
+                roundButton
+                roundButton
+                roundButton
+                roundButton
+                roundButton
+            }
+        }
+        
+        
         ZStack {
             Rectangle().ignoresSafeArea()
             VStack {
