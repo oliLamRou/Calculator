@@ -18,80 +18,64 @@ let calculatorButtons = [
 struct ContentView: View {
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     
-    var roundButton: some View {
-        Circle()
+//    var buttonColor: Color {
+//        switch
+//    }
+        
+    var zeroButton: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 40)
+                .frame(width: 175, height: 82)
+                .foregroundColor(.buttonDarkGray)
+            Text(calculatorButtons[16])
+                .font(.largeTitle)
+                .foregroundStyle(.white)
+                .padding()
+        }
     }
     
     var body: some View {
-        HStack {
-            VStack {
-                // top gray
-                HStack {
-                    roundButton
-                    roundButton
-                    roundButton
-                }
-                // number 1 to 9
-                LazyVGrid(columns: [GridItem(), GridItem(), GridItem()]) {
-                    ForEach(1..<10) { value in
-                        roundButton
-                    }
-                }
-                //0.
-                HStack {
-                    RoundedRectangle(cornerRadius: 100).frame(width: 50)
-                    roundButton
-                }
-            }
-            // ÷x+-=
-            VStack {
-                roundButton
-                roundButton
-                roundButton
-                roundButton
-                roundButton
-            }
-        }
-        
-        
         ZStack {
-            Rectangle().ignoresSafeArea()
+            Rectangle()
+                .foregroundColor(.black)
+                .ignoresSafeArea()
             VStack {
                 Spacer()
                 HStack {
                     Spacer()
                     Text("1000")
-                        .font(.system(size: 90))
+                        .font(.system(size: 80))
+                        .bold()
                         .foregroundStyle(.white)
-                        .padding()
+                        .padding(.vertical, -10)
                 }
-                LazyVGrid(columns: columns) {
-                    ForEach(0..<calculatorButtons.count) { index in
-                         calculatorButton(index)
-                     }
-                }.padding()
+                LazyVGrid(columns: [GridItem(), GridItem(), GridItem(), GridItem()]) {
+                    ForEach(0..<16) { index in
+                        calculatorButton(index)
+                    }
+                }
+                HStack {
+                    zeroButton
+                    calculatorButton(17)
+                    calculatorButton(18)
+                }
             }
+            .padding()
         }
     }
-    
-    /*:
-     -note:
-        - get the ZERO button to fit
-        - Total closer to button
-     */
-    
+        
     @ViewBuilder
     func calculatorButton(_ index: Int) -> some View {
         let value = calculatorButtons[index]
         
         var color: Color {
             if index < 3 {
-                return .gray
+                return .buttonGray
             }
             if [3,7,11,15,18].contains(where: {$0 == index}) {
-                return .orange
+                return .buttonOrange
             }
-            return Color(.darkGray)
+            return Color(.buttonDarkGray)
         }
         
         ZStack {
