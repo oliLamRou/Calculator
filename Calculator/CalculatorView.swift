@@ -7,20 +7,10 @@
 
 import SwiftUI
 
-let calculatorButtons = [
-        "c", "+/-", "%", "÷",
-        "9", "8", "7", "x",
-        "6", "5", "4", "-",
-        "3", "2", "1", "+",
-        "0", ".", "="
-]
-
-struct ContentView: View {
-    let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
+struct CalculatorView: View {
+    @ObservedObject var calculatorLogic: CalculatorLogic
     
-//    var buttonColor: Color {
-//        switch
-//    }
+    private let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
         
     var zeroButton: some View {
         ZStack {
@@ -43,14 +33,14 @@ struct ContentView: View {
                 Spacer()
                 HStack {
                     Spacer()
-                    Text("1000")
+                    Text(calculatorLogic.resultFormatted)
                         .font(.system(size: 80))
                         .bold()
                         .foregroundStyle(.white)
                         .padding(.vertical, -10)
                 }
                 LazyVGrid(columns: [GridItem(), GridItem(), GridItem(), GridItem()]) {
-                    ForEach(0..<16) { index in
+                    ForEach(buttons, id: \.self) { index in
                         calculatorButton(index)
                     }
                 }
@@ -78,22 +68,26 @@ struct ContentView: View {
             return Color(.buttonDarkGray)
         }
         
-        ZStack {
-            if index == 16 {
-                RoundedRectangle(cornerRadius: 50.0)
-                    .foregroundStyle(color)
-                    .frame(width: 100)
-            } else {
-                Circle().foregroundStyle(color)
+        Button {
+            calculatorLogic.numberButton(index)
+        } label: {
+            ZStack {
+                if index == 16 {
+                    RoundedRectangle(cornerRadius: 50.0)
+                        .foregroundStyle(color)
+                        .frame(width: 100)
+                } else {
+                    Circle().foregroundStyle(color)
+                }
+                Text(value)
+                    .font(.largeTitle)
+                    .foregroundStyle(.white)
+                    .padding()
             }
-            Text(value)
-                .font(.largeTitle)
-                .foregroundStyle(.white)
-                .padding()
         }
     }
 }
 
 #Preview {
-    ContentView()
+    CalculatorView(calculatorLogic: CalculatorLogic())
 }

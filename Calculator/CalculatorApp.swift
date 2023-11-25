@@ -10,8 +10,10 @@ import SwiftUI
 @main
 struct CalculatorApp: App {
     var body: some Scene {
+        let calculatorLogic = CalculatorLogic()
+        
         WindowGroup {
-            ContentView()
+            CalculatorView(calculatorLogic: calculatorLogic)
         }
     }
 }
