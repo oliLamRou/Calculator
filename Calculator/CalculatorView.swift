@@ -12,18 +12,6 @@ struct CalculatorView: View {
     
     private let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     
-    var zeroButton: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 40)
-                .frame(width: 175, height: 82)
-                .foregroundColor(.buttonDarkGray)
-            Text(calculatorButtons[16])
-                .font(.largeTitle)
-                .foregroundStyle(.white)
-                .padding()
-        }
-    }
-    
     var body: some View {
         ZStack {
             Rectangle()
@@ -42,54 +30,46 @@ struct CalculatorView: View {
                         HStack {
                             ForEach(row, id: \.self) { op in
                                 if op.rawValue == buttons.zero.rawValue {
-                                    
+                                    Button {
+                                        
+                                    } label: {
+                                        ZStack {
+                                            RoundedRectangle(cornerRadius: 50)
+                                                .frame(width: 180, height: 82)
+                                                .foregroundColor(.buttonDarkGray)
+                                            Text(op.rawValue)
+                                                .font(.largeTitle)
+                                                .foregroundStyle(.white)
+                                                .padding()
+                                        }
+                                    }
                                 }else {
-                                    calculatorButton(0)
+                                    Button {
+                                        
+                                    } label: {
+                                        ZStack {
+                                            /*:
+                                             - somehow can use button shape directly
+                                             - then be easy to set w and h base on display size 
+                                             
+                                             */
+                                            Circle().foregroundStyle(op.buttonColor)
+                                            Text(op.rawValue)
+                                                .font(.largeTitle)
+                                                .foregroundStyle(.white)
+                                                .padding()
+                                        }
+                                    }
                                 }
-
                             }
                         }
                     }
                 }
-                
-                .padding()
             }
+            .padding()
         }
     }
-        
-        @ViewBuilder
-        func calculatorButton(_ index: Int) -> some View {
-            let value = calculatorButtons[index]
-            
-            var color: Color {
-                if index < 3 {
-                    return .buttonGray
-                }
-                if [3,7,11,15,18].contains(where: {$0 == index}) {
-                    return .buttonOrange
-                }
-                return Color(.buttonDarkGray)
-            }
-            
-            Button {
-                calculatorLogic.numberButton(index)
-            } label: {
-                ZStack {
-                    if index == 16 {
-                        RoundedRectangle(cornerRadius: 50.0)
-                            .foregroundStyle(color)
-                            .frame(width: 100)
-                    } else {
-                        Circle().foregroundStyle(color)
-                    }
-                    Text(value)
-                        .font(.largeTitle)
-                        .foregroundStyle(.white)
-                        .padding()
-                }
-            }
-        }
-    }
+}
 
 #Preview {
     CalculatorView(calculatorLogic: CalculatorLogic())

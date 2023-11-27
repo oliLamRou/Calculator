@@ -7,29 +7,6 @@
 
 import SwiftUI
 
-let calculatorButtons = [
-        "c", "+/-", "%", "÷",
-        "9", "8", "7", "x",
-        "6", "5", "4", "-",
-        "3", "2", "1", "+",
-        "0", ".", "="
-]
-
-enum buttonType {
-    case number, math, equal, clear
-}
-
-enum buttonColor {
-    case orange, gray, darkGray, black, white
-}
-
-struct button: Identifiable {
-    let label: String
-    let type: buttonType
-    let color: buttonColor
-    let id: Int
-}
-
 enum buttons: String {
     case one = "1"
     case two = "2"
@@ -53,10 +30,12 @@ enum buttons: String {
     
     var buttonColor: Color {
         switch self {
-        case .add, .clear:
-            return .red
+        case .clear, .invert, .percent:
+            return .buttonGray
+        case .divide, .multiply, .minus, .add, .equal:
+            return .buttonOrange
         default:
-            return .green
+            return .buttonDarkGray
         }
     }
 }

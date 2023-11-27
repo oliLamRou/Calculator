@@ -25,14 +25,14 @@ class CalculatorLogic: ObservableObject {
             return
         }
         
-        if [4,5,6,8,9,10,12,13,14,16,17].contains(where: { $0 == index }){
-            if !isUserInput {
-                userInput = calculatorButtons[index]
-                isUserInput = true
-                return
-            }
-            userInput = userInput + calculatorButtons[index]
-        }
+//        if [4,5,6,8,9,10,12,13,14,16,17].contains(where: { $0 == index }){
+//            if !isUserInput {
+//                userInput = calculatorButtons[index]
+//                isUserInput = true
+//                return
+//            }
+//            userInput = userInput + calculatorButtons[index]
+//        }
     }
     
 }
