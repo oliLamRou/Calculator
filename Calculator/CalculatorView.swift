@@ -79,39 +79,47 @@ struct CalculatorView: View {
                 .ignoresSafeArea()
             VStack {
                 Spacer()
-                HStack {
-                    Spacer()
-                    Text(calculatorLogic.resultFormatted)
-                        .font(.system(size: 80))
-                        .bold()
-                        .foregroundStyle(.white)
-                        .padding(.vertical, -10)
-                        .padding(.horizontal)
-                    
-                }
-                VStack(spacing: buttonPadding) {
-                    ForEach(buttonLayout, id: \.self) { row in
-                        HStack(spacing: buttonPadding) {
-                            ForEach(row, id: \.self) { op in
-                                Button {
-                                    
-                                } label: {
-                                    ZStack {
-                                        //then be easy to set w and h base on display size
-                                        RoundedRectangle(cornerRadius: op.buttonHeight)
-                                            .frame(
-                                                width: op.buttonWidth,
-                                                height: op.buttonHeight
-                                            )
-                                            .foregroundStyle(op.buttonColor)
-                                        Text(op.rawValue)
-                                            .font(.largeTitle)
-                                            .foregroundStyle(.white)
-                                            .padding()
-                                    }
-                                }.padding(op.buttonPadding)
+                resultView
+                buttonView
+            }
+        }
+    }
+    
+    var resultView: some View {
+        HStack {
+            Spacer()
+            Text(calculatorLogic.resultFormatted)
+                .font(.system(size: 80))
+                .bold()
+                .foregroundStyle(.white)
+                .padding(.vertical, -10)
+                .padding(.horizontal)
+            
+        }
+    }
+    
+    var buttonView: some View {
+        VStack(spacing: buttonPadding) {
+            ForEach(buttonLayout, id: \.self) { row in
+                HStack(spacing: buttonPadding) {
+                    ForEach(row, id: \.self) { op in
+                        Button {
+                            
+                        } label: {
+                            ZStack {
+                                //then be easy to set w and h base on display size
+                                RoundedRectangle(cornerRadius: op.buttonHeight)
+                                    .frame(
+                                        width: op.buttonWidth,
+                                        height: op.buttonHeight
+                                    )
+                                    .foregroundStyle(op.buttonColor)
+                                Text(op.rawValue)
+                                    .font(.largeTitle)
+                                    .foregroundStyle(.white)
+                                    .padding()
                             }
-                        }
+                        }.padding(op.buttonPadding)
                     }
                 }
             }
