@@ -8,72 +8,76 @@
 import Foundation
 
 class CalculatorLogic: ObservableObject {
-    @Published var result: String = "0"
-    @Published var userInput: String?
-    @Published var isUserInput = false
-    private var currentOp: buttons?
+    @Published var number: String?
+    private var result: String?
+    private var userInput: String?
     
-    var resultFormatted: String {
-        if isUserInput {
-            if let userInput = userInput {
-                return userInput
-            }
-            return "0"
-        }
-        return result
-    }
+    private var isUserInput = false
+    private var currentOp: buttons?
     
     func result(_ op: buttons) {
         switch op {
+        case .divide, .multiply, .add, .minus:
+            result = userInput ?? "0"
+            userInput = nil
+            isUserInput = false
+            currentOp = op
+        case .one ,.two, .three, .four, .five, .six, .seven, .eigh, .nine, .zero:
+            isUserInput = true
+            userInput = (userInput ?? "") + op.rawValue
+        case .dot:
+            isUserInput = true
+            if let userInput = userInput, !userInput.contains(where: { $0 == "."}) {
+                self.userInput! += "."
+            }
         case .clear:
-            userInput = "0"
+            if isUserInput {
+                isUserInput = false
+                userInput = nil
+            } else {
+                result = nil
+            }
         case .invert:
             if isUserInput {
-                userInput = String(Float(userInput)! * -1)
+                userInput = String(Double(userInput ?? "0")! * -1)
             } else {
-                result = String(Float(result)! * -1)
+                result = String(Double(result ?? "0")! * -1)
             }
+            
         case .percent:
             if isUserInput {
-                userInput = String(Float(userInput)! / 100)
+                userInput = String(Double(userInput ?? "0")! * 0.01)
             } else {
-                result = String(Float(result)! / 100)
+                result = String(Double(result ?? "0")! * 0.01)
             }
-
-        case .add, .minus, .multiply, .divide:
-            currentOp = op
+            
         case .equal:
-            print(op.rawValue)
-        case .dot:
-            print("dot")
-            if !userInput.contains(where: {$0 == "."}) {
-                userInput += op.rawValue
+            var floatResult: Double = 0.0
+            let A = Double(result ?? "0")!
+            let B = Double(userInput ?? "0")!
+            
+            switch currentOp {
+            case .divide:
+                floatResult = A / B
+            case .multiply:
+                floatResult = A * B
+            case .add:
+                floatResult = A + B
+            case .minus:
+                floatResult = A - B
+            default:
+                print("nothing")
             }
-                
-        default:
-            if isUserInput {
-                userInput += op.rawValue
-            } else {
-                isUserInput = true
-                userInput = op.rawValue
-            }
-        }
-    }
-    
-    func numberButton(_ index: Int) {
-        if index == 0 {
+            
+            result = String(floatResult)
             isUserInput = false
-            return
         }
         
-//        if [4,5,6,8,9,10,12,13,14,16,17].contains(where: { $0 == index }){
-//            if !isUserInput {
-//                userInput = calculatorButtons[index]
-//                isUserInput = true
-//                return
-//            }
-//            userInput = userInput + calculatorButtons[index]
-//        }
-    }
-    
+        if isUserInput {
+            number = userInput
+        } else {
+            number = result
+        }
+        
+    }    
 }

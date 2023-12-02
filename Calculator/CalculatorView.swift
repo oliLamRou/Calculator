@@ -29,7 +29,7 @@ struct CalculatorView: View {
     var resultView: some View {
         HStack {
             Spacer()
-            Text(calculatorLogic.resultFormatted)
+            Text(calculatorLogic.number ?? "0")
                 .font(.system(size: 80))
                 .bold()
                 .foregroundStyle(.white)
