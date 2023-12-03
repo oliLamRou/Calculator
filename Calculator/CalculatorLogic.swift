@@ -8,16 +8,20 @@
 import Foundation
 
 class CalculatorLogic: ObservableObject {
-    @Published var number: String?
-    private var result: String?
-    private var userInput: String?
-    
+    @Published private(set) var number: String?
     private var isUserInput = false
+    private var result: String?
+    @Published private(set) var userInput: String?
+    
+    
     private var currentOp: buttons?
     
     func result(_ op: buttons) {
         switch op {
         case .divide, .multiply, .add, .minus:
+            if userInput != nil && currentOp != nil {
+                equalOperation()
+            }
             result = userInput ?? "0"
             userInput = nil
             isUserInput = false
@@ -31,12 +35,14 @@ class CalculatorLogic: ObservableObject {
                 self.userInput! += "."
             }
         case .clear:
-            if isUserInput {
+            if userInput != nil {
                 isUserInput = false
                 userInput = nil
             } else {
                 result = nil
             }
+        case .allClear:
+            result = nil
         case .invert:
             if isUserInput {
                 userInput = String(Double(userInput ?? "0")! * -1)
@@ -52,25 +58,7 @@ class CalculatorLogic: ObservableObject {
             }
             
         case .equal:
-            var floatResult: Double = 0.0
-            let A = Double(result ?? "0")!
-            let B = Double(userInput ?? "0")!
-            
-            switch currentOp {
-            case .divide:
-                floatResult = A / B
-            case .multiply:
-                floatResult = A * B
-            case .add:
-                floatResult = A + B
-            case .minus:
-                floatResult = A - B
-            default:
-                print("nothing")
-            }
-            
-            result = String(floatResult)
-            isUserInput = false
+            equalOperation()
         }
         
         if isUserInput {
@@ -79,5 +67,27 @@ class CalculatorLogic: ObservableObject {
             number = result
         }
         
-    }    
+    }
+    
+    func equalOperation() {
+        var floatResult: Double = 0.0
+        let A = Double(result ?? "0")!
+        let B = Double(userInput ?? "0")!
+        
+        switch currentOp {
+        case .divide:
+            floatResult = A / B
+        case .multiply:
+            floatResult = A * B
+        case .add:
+            floatResult = A + B
+        case .minus:
+            floatResult = A - B
+        default:
+            print("nothing")
+        }
+        
+        result = String(floatResult)
+        isUserInput = false
+    }
 }

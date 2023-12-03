@@ -12,7 +12,6 @@ struct CalculatorView: View {
     
     private let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     
-    
     var body: some View {
         ZStack {
             Rectangle()
@@ -26,10 +25,24 @@ struct CalculatorView: View {
         }
     }
     
+    var numberFormatted: String {
+        guard let number = calculatorLogic.number else {
+            return "0"
+        }
+        guard let number = Double(number) else {
+            return "0"
+        }
+        if number - Double(Int(number)) == 0 {
+            return String(Int(number))
+        }
+
+        return String(number)
+    }
+    
     var resultView: some View {
         HStack {
             Spacer()
-            Text(calculatorLogic.number ?? "0")
+            Text(numberFormatted)
                 .font(.system(size: 80))
                 .bold()
                 .foregroundStyle(.white)
@@ -55,6 +68,7 @@ struct CalculatorView: View {
                                         height: op.buttonHeight
                                     )
                                     .foregroundStyle(op.buttonColor)
+                                
                                 Text(op.rawValue)
                                     .font(.largeTitle)
                                     .foregroundStyle(.white)

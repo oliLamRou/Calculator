@@ -18,7 +18,8 @@ enum buttons: String {
     case nine = "9"
     case zero = "0"
     case dot = "."
-    case clear = "c"
+    case clear = "C"
+    case allClear = "AC"
     case invert = "+/-"
     case equal = "="
     case percent = "%"
@@ -29,7 +30,7 @@ enum buttons: String {
     
     var buttonColor: Color {
         switch self {
-        case .clear, .invert, .percent:
+        case .allClear, .clear, .invert, .percent:
             return .buttonGray
         case .divide, .multiply, .minus, .add, .equal:
             return .buttonOrange
